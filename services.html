@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services - AzMeer Soft</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-code"></i>
+                    <span>AzMeer Soft</span>
+                </a>
+                <div class="nav-links">
+                    <a href="home.html">Home</a>
+                    <a href="services.html" class="active">Services</a>
+                    <a href="ourapps.html">Our Apps</a>
+                    <a href="blog.html">Blog</a>
+                    <a href="about.html">About</a>
+                </div>
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search for services...">
+                </div>
+                <div class="auth-buttons">
+                    <a href="cart.html" class="btn btn-outline" id="cart-button">
+                        <i class="fas fa-shopping-cart"></i> Cart (<span id="cart-count">0</span>)
+                    </a>
+                    <a href="login.html" class="btn btn-outline">Log In</a>
+                    <a href="signup.html" class="btn btn-primary">Sign Up</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Services Hero -->
+    <section class="about-hero">
+        <div class="container">
+            <h1>Our Services</h1>
+            <p>Professional digital solutions tailored to your business needs</p>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="section services">
+        <div class="container">
+            <div class="service-tabs">
+                <div class="service-tab active" data-category="all">All Services</div>
+                <div class="service-tab" data-category="web">Web Development</div>
+                <div class="service-tab" data-category="mobile">Mobile Apps</div>
+                <div class="service-tab" data-category="design">Graphic Design</div>
+            </div>
+            
+            <div class="service-cards" id="services-container">
+                <!-- Services loaded dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="container">
+        <div class="cta fade-in">
+            <h2>Can't Find What You're Looking For?</h2>
+            <p>Contact us for custom solutions tailored to your specific requirements</p>
+            <a href="contact.html" class="btn btn-light">Get Custom Quote</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <!-- Same footer as index.html -->
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
