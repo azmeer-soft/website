@@ -57,7 +57,11 @@
             </div>
             
             <div class="service-cards" id="services-container">
-                <!-- Services loaded dynamically -->
+                <!-- Services will be loaded dynamically by JavaScript -->
+                <div style="text-align: center; padding: 40px; color: var(--text-light);">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 24px; margin-bottom: 15px;"></i>
+                    <p>Loading services...</p>
+                </div>
             </div>
         </div>
     </section>
@@ -75,11 +79,65 @@
     <footer>
         <div class="container">
             <div class="footer-content">
-                <!-- Same footer as index.html -->
+                <div class="footer-column">
+                    <a href="index.html" class="logo" style="color: white;">
+                        <i class="fas fa-code"></i>
+                        <span>AzMeer Soft</span>
+                    </a>
+                    <p style="margin: 20px 0; color: #b0b0b0;">Premium digital solutions for businesses worldwide. Transforming ideas into reality with cutting-edge technology.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Services</h3>
+                    <ul class="footer-links">
+                        <li><a href="services.html">Web Development</a></li>
+                        <li><a href="services.html">Mobile Apps</a></li>
+                        <li><a href="services.html">UI/UX Design</a></li>
+                        <li><a href="services.html">Digital Marketing</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul class="footer-links">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="ourapps.html">Our Apps</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Support</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 AzMeer Soft. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
     <script src="script.js"></script>
+    <script>
+        // Debug helper - you can remove this in production
+        console.log('Services page loaded');
+        // Force services load if not loaded automatically
+        setTimeout(() => {
+            if (document.getElementById('services-container').children.length <= 1) {
+                console.log('Forcing services load...');
+                if (typeof loadServices === 'function') {
+                    loadServices();
+                }
+            }
+        }, 1000);
+    </script>
 </body>
 </html>
