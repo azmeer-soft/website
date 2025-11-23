@@ -69,6 +69,28 @@ const servicesData = [
         rating: 4.8,
         reviews: 132,
         image: "https://images.unsplash.com/photo-1565688534245-05d6b5be184a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    },
+    {
+        id: 7,
+        name: "WordPress Website",
+        category: "web",
+        price: 299,
+        description: "I will create a beautiful, responsive WordPress website with custom themes and plugins.",
+        features: ["Custom WordPress theme", "Responsive design", "SEO optimized", "Content management system"],
+        rating: 4.7,
+        reviews: 156,
+        image: "https://images.unsplash.com/photo-1565688534245-05d6b5be184a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    },
+    {
+        id: 8,
+        name: "React Web Application",
+        category: "web",
+        price: 799,
+        description: "I will develop a modern React.js application with state management and API integration.",
+        features: ["React.js framework", "State management", "REST API integration", "Modern UI components"],
+        rating: 4.8,
+        reviews: 89,
+        image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     }
 ];
 
@@ -142,33 +164,43 @@ const blogData = [
 
 // Initialize the page
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, initializing...');
     updateCartCount();
     initializePage();
     setupEventListeners();
+    initializeScrollAnimations();
 });
 
 // Initialize page-specific functionality
 function initializePage() {
     const path = window.location.pathname;
     const page = path.split("/").pop();
+    console.log('Current page:', page);
     
     switch(page) {
         case 'services.html':
+            console.log('Loading services...');
             loadServices();
             break;
         case 'ourapps.html':
+            console.log('Loading apps...');
             loadApps();
             break;
         case 'blog.html':
+            console.log('Loading blog posts...');
             loadBlogPosts();
             break;
         case 'cart.html':
+            console.log('Loading cart...');
             loadCart();
             break;
         case 'login.html':
         case 'signup.html':
+            console.log('Setting up auth forms...');
             setupAuthForms();
             break;
+        default:
+            console.log('No specific page initialization needed');
     }
 }
 
@@ -176,6 +208,8 @@ function initializePage() {
 function setupEventListeners() {
     // Service tabs functionality
     const serviceTabs = document.querySelectorAll('.service-tab');
+    console.log('Found service tabs:', serviceTabs.length);
+    
     if (serviceTabs.length > 0) {
         serviceTabs.forEach(tab => {
             tab.addEventListener('click', function() {
@@ -183,12 +217,13 @@ function setupEventListeners() {
                 this.classList.add('active');
                 
                 const category = this.getAttribute('data-category');
+                console.log('Filtering services by category:', category);
                 filterServices(category);
             });
         });
     }
 
-    // Add to cart buttons
+    // Add to cart buttons (delegated event listener)
     document.addEventListener('click', function(e) {
         if (e.target.classList.contains('add-to-cart') || e.target.closest('.add-to-cart')) {
             const button = e.target.classList.contains('add-to-cart') ? e.target : e.target.closest('.add-to-cart');
@@ -196,6 +231,7 @@ function setupEventListeners() {
             const name = button.getAttribute('data-name');
             const price = parseFloat(button.getAttribute('data-price'));
             
+            console.log('Adding to cart:', {id, name, price});
             addToCart(id, name, price);
             showNotification('Item added to cart successfully!');
         }
@@ -206,6 +242,7 @@ function setupEventListeners() {
         if (e.target.classList.contains('cart-item-remove') || e.target.closest('.cart-item-remove')) {
             const button = e.target.classList.contains('cart-item-remove') ? e.target : e.target.closest('.cart-item-remove');
             const id = button.getAttribute('data-id');
+            console.log('Removing from cart:', id);
             removeFromCart(id);
         }
     });
@@ -258,13 +295,16 @@ function loadCart() {
     const cartItems = document.getElementById('cart-items');
     const cartTotal = document.getElementById('cart-total');
     
-    if (!cartItems) return;
+    if (!cartItems) {
+        console.log('Cart items container not found');
+        return;
+    }
     
     cartItems.innerHTML = '';
     let total = 0;
     
     if (cart.length === 0) {
-        cartItems.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
+        cartItems.innerHTML = '<div class="empty-cart" style="text-align: center; padding: 40px; color: var(--text-light);">Your cart is empty</div>';
         if (cartTotal) cartTotal.textContent = '$0';
         return;
     }
@@ -273,11 +313,14 @@ function loadCart() {
         const itemTotal = item.price * item.quantity;
         total += itemTotal;
         
+        const service = servicesData.find(s => s.id == item.id);
+        const imageUrl = service ? service.image : 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80';
+        
         const cartItem = document.createElement('div');
         cartItem.className = 'cart-item';
         cartItem.innerHTML = `
             <div class="cart-item-image">
-                <img src="${servicesData.find(s => s.id == item.id)?.image || 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80'}" alt="${item.name}">
+                <img src="${imageUrl}" alt="${item.name}">
             </div>
             <div class="cart-item-details">
                 <div class="cart-item-title">${item.name}</div>
@@ -297,8 +340,12 @@ function loadCart() {
 // Services functionality
 function loadServices() {
     const servicesContainer = document.getElementById('services-container');
-    if (!servicesContainer) return;
+    if (!servicesContainer) {
+        console.error('Services container not found!');
+        return;
+    }
     
+    console.log('Loading services into container...');
     servicesContainer.innerHTML = '';
     
     servicesData.forEach(service => {
@@ -308,7 +355,7 @@ function loadServices() {
         
         serviceCard.innerHTML = `
             <div class="service-image">
-                <img src="${service.image}" alt="${service.name}">
+                <img src="${service.image}" alt="${service.name}" onerror="this.src='https://images.unsplash.com/photo-1504384308090-c894fdcc538d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'">
             </div>
             <div class="service-info">
                 <div class="service-header">
@@ -324,17 +371,28 @@ function loadServices() {
                         <i class="fas fa-star"></i>
                         <span>${service.rating} (${service.reviews})</span>
                     </div>
-                    <button class="btn btn-primary add-to-cart" data-id="${service.id}" data-name="${service.name}" data-price="${service.price}">Add to Cart</button>
+                    <button class="btn btn-primary add-to-cart" 
+                            data-id="${service.id}" 
+                            data-name="${service.name}" 
+                            data-price="${service.price}">
+                        Add to Cart
+                    </button>
                 </div>
             </div>
         `;
         
         servicesContainer.appendChild(serviceCard);
     });
+    
+    console.log(`Loaded ${servicesData.length} services`);
+    
+    // Initialize scroll animations for newly added elements
+    initializeScrollAnimations();
 }
 
 function filterServices(category) {
     const serviceCards = document.querySelectorAll('.service-card');
+    console.log(`Filtering ${serviceCards.length} services by category: ${category}`);
     
     serviceCards.forEach(card => {
         if (category === 'all' || card.getAttribute('data-category') === category) {
@@ -348,7 +406,10 @@ function filterServices(category) {
 // Apps functionality
 function loadApps() {
     const appsContainer = document.getElementById('apps-container');
-    if (!appsContainer) return;
+    if (!appsContainer) {
+        console.error('Apps container not found!');
+        return;
+    }
     
     appsContainer.innerHTML = '';
     
@@ -377,12 +438,17 @@ function loadApps() {
         
         appsContainer.appendChild(appCard);
     });
+    
+    initializeScrollAnimations();
 }
 
 // Blog functionality
 function loadBlogPosts() {
     const blogContainer = document.getElementById('blog-container');
-    if (!blogContainer) return;
+    if (!blogContainer) {
+        console.error('Blog container not found!');
+        return;
+    }
     
     blogContainer.innerHTML = '';
     
@@ -392,7 +458,7 @@ function loadBlogPosts() {
         
         blogCard.innerHTML = `
             <div class="blog-image">
-                <img src="${post.image}" alt="${post.title}">
+                <img src="${post.image}" alt="${post.title}" onerror="this.src='https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'">
             </div>
             <div class="blog-content">
                 <div class="blog-date">${post.date} | ${post.category}</div>
@@ -406,6 +472,8 @@ function loadBlogPosts() {
         
         blogContainer.appendChild(blogCard);
     });
+    
+    initializeScrollAnimations();
 }
 
 // Auth functionality
@@ -479,26 +547,39 @@ function showNotification(message) {
     setTimeout(() => {
         notification.style.transform = 'translateX(100%)';
         setTimeout(() => {
-            document.body.removeChild(notification);
+            if (notification.parentNode) {
+                document.body.removeChild(notification);
+            }
         }, 300);
     }, 3000);
 }
 
 // Scroll animations
-const fadeElements = document.querySelectorAll('.fade-in');
-const appearOptions = {
-    threshold: 0.15,
-    rootMargin: "0px 0px -100px 0px"
-};
+function initializeScrollAnimations() {
+    const fadeElements = document.querySelectorAll('.fade-in');
+    console.log('Initializing scroll animations for', fadeElements.length, 'elements');
+    
+    const appearOptions = {
+        threshold: 0.15,
+        rootMargin: "0px 0px -100px 0px"
+    };
 
-const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll) {
-    entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add('appear');
-        appearOnScroll.unobserve(entry.target);
+    const appearOnScroll = new IntersectionObserver(function(entries, observer) {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add('appear');
+            observer.unobserve(entry.target);
+        });
+    }, appearOptions);
+
+    fadeElements.forEach(element => {
+        appearOnScroll.observe(element);
     });
-}, appearOptions);
+}
 
-fadeElements.forEach(element => {
-    appearOnScroll.observe(element);
-});
+// Make functions globally available for debugging
+window.debugServices = function() {
+    console.log('Services Data:', servicesData);
+    console.log('Cart:', cart);
+    console.log('Current User:', currentUser);
+};
